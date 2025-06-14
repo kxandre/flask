@@ -1,4 +1,5 @@
 import os
+import traceback
 from flask import Flask, request, jsonify
 from pytrends.request import TrendReq
 
@@ -33,6 +34,8 @@ def get_trends():
         return jsonify(top_df.to_dict(orient='records'))
 
     except Exception as e:
+        print("Erro detalhado no servidor:")
+        traceback.print_exc()
         return jsonify({"erro": f"Erro ao buscar dados do Google Trends: {str(e)}"}), 500
 
 if __name__ == '__main__':
