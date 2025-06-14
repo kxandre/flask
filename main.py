@@ -18,17 +18,17 @@ def get_trends():
     try:
         pytrends.build_payload([termo], timeframe='today 12-m', geo='BR')
         related = pytrends.related_queries()
-        resultado = related.get(termo, {}).get('top')
+        dados = related.get(termo)
 
-        if resultado is not None:
-            return jsonify(resultado.to_dict(orient='records'))
+        if dados and dados.get('top') is not None:
+            return jsonify(dados['top'].to_dict(orient='records'))
         else:
             return jsonify([])
 
     except Exception as e:
         return jsonify({"erro": f"Erro ao buscar dados do Google Trends: {str(e)}"}), 500
 
-# 🔥 Este bloco garante que a app escute na porta correta no Railway
+# Garante que o app escute na porta que o Railway define
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
